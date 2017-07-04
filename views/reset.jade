@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  form(method='POST',onsubmit="return passcheck()")
+    div(class='isa_error')
+      h4(id='passerr')
+    legend Reset Password
+    .form-group
+      label(for='password') New Password
+      input.form-control(type='password', name='password', value='', id='password',placeholder='New password', autofocus=true)
+    .form-group
+      label(for='confirm') Confirm Password
+      input.form-control(type='password', name='confirm',id='confirm_password', value='', placeholder='Confirm password')
+    .form-group
+      button.btn.btn-primary(type='submit',id='regbtn') Update Password
+
+  script.
+    function passcheck()
+    {
+      //alert($('#password').val());
+      if($('#password').val()==$('#confirm_password').val())
+        return(true);
+      else
+      {
+        document.getElementById('passerr').innerHTML = "PASSWORD and the CONFIRM PASSWORD do not match";
+        return(false);
+      }
+
+    }

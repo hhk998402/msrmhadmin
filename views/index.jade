@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    if(!user)
+        h1(class="title")= title
+        h4(class="subtitle") An initiative by MS Ramaiah Memorial Hospital
+        <br>
+        .card
+            .container1
+                p Employee Exit form automation is an initiative by the MS Ramaiah Memorial Hospital - HR Department to better understand why an employee has chosen to leave this institution. This is to analyse the main reasons and to take appropriate, timely corrective measures so that attrition is reduced
+    else if(user)
+        h1(class="title") Employee Exit Forms
+        <br>
+        .card1
+            .container2
+                h4(class="username") Welcome, #{user.username}
+                p(class="usertitle") MS Ramaiah Memorial Hospital
+                button(class="clickme") Contact
+            </div>
+        </div>

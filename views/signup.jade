@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  div(class='isa_error')
+    h4(id='passerr')
+  form(method='POST',onsubmit="return passcheck()")
+    legend Signup
+    .form-group
+      label(for='username') Username
+      input.form-control(type='text', name='username', autofocus)
+    .form-group
+      label(for='email') Email
+      input.form-control(type='text', name='email')
+    .form-group
+      label(for='password') Password
+      input.form-control(type='password', name='password',id='password')
+    .form-group
+      label(for='confirm') Confirm Password
+      input.form-control(type='password', name='confirm',id='confirm_password')
+    button.btn.btn-primary(type='submit') Signup
+
+  script.
+    function passcheck()
+    {
+      //alert($('#password').val());
+      if($('#password').val()==$('#confirm_password').val())
+        return(true);
+      else
+      {
+        document.getElementById('passerr').innerHTML = "PASSWORD and the CONFIRM PASSWORD do not match";
+        return(false);
+      }
+
+    }

@@ -1,0 +1,147 @@
+.isa_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+
+.card {
+display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+
+    /* Safari and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
+    text-align:center;
+    text-align:justify;
+}
+
+.container1{
+    background: #fff;
+  border-radius: 2px;
+  float:center;
+  align:center;
+  height: 100%;
+  width: 70%;
+
+    padding: 10px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+.title,.subtitle{
+    display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+
+    /* Safari and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
+    text-align:center;
+    text-align:justify;
+}
+
+.imag{
+    margin-right: 100%;
+    min-height: 50px;
+}
+
+.card1 {
+display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+
+    /* Safari and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
+    text-align:center;
+}
+
+.container2 {
+     background: #fff;
+  border-radius: 2px;
+  float:center;
+  align:center;
+  height: 100%;
+  width: 60%;
+  position:relative;
+
+    padding: 10px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+.username {
+    color: grey;
+    font-size: 18px;
+    display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+
+    /* Safari and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
+    text-align:center;
+}
+
+.clickme {
+    border: none;
+    outline: 0;
+    padding: 8px;
+    display:-moz-box;
+    -moz-box-pack:center;
+    -moz-box-align:center;
+
+    /* Safari and Chrome */
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+
+    /* W3C */
+    display:box;
+    box-pack:center;
+    box-align:center;
+    text-align:center;
+    align-items: center;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 30%;
+    font-size: 18px;
+}
+
+.clickme:hover{
+    opacity: 0.7;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #e2e1e0;
+}
+
+a {
+  color: #00B7FF;
+}
