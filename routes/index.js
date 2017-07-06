@@ -11,16 +11,44 @@ var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
 var flash = require('express-flash');
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://hhk998402:SkillRack998@quizcluster-shard-00-00-1gbtm.mongodb.net:27017,quizcluster-shard-00-01-1gbtm.mongodb.net:27017,quizcluster-shard-00-02-1gbtm.mongodb.net:27017/quiz?ssl=true&replicaSet=QuizCluster-shard-0&authSource=admin";
 //var User = require('../app.js');
 //var User = mongoose.model('User', userSchema);
 
 router.get('/', function(req, res){
   //if(req.user)
   //{
-  res.render('index', {
-    title: 'Employee Exit Form',
-    user: req.user
-  });
+    if(req.user)
+    {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+                db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
+            if (err) throw err;
+            if(result)
+              res.render('index', {
+              title: 'Employee Exit Form',
+              user: req.user,
+              formexist: true
+              });
+            else
+              res.render('index', {
+              title: 'Employee Exit Form',
+              user: req.user,
+              formexist: false
+              });
+            db.close();
+        });
+    });
+    }
+        else
+        {
+          res.render('index', {
+              title: 'Employee Exit Form',
+              user: req.user
+        });
+      }
 //}
     /*else
     {
@@ -57,16 +85,56 @@ router.get('/signup', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
-  var user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password
-    });
+  User.findOne({ username: req.body.username }, function(err, user1) {
+    User.findOne({ email: req.body.email }, function(err, user) {
+        var flag=true;
+        if(user1)
+        {
+          req.flash('error4', 'An account with that USERNAME already exists.');
+          flag=false;
+        }
+        if (user) {
+          req.flash('error', 'An account with that EMAIL ADDRESS already exists.');
+          flag=false;
+        }
+        if(req.body.password!=req.body.confirm)
+        {
+          req.flash('error1','PASSWORD and CONFIRM PASSWORD do not match');
+          flag=false;
+        }
 
-  user.save(function(err) {
-    req.logIn(user, function(err) {
-      res.redirect('/');
-    });
+        if(req.body.password == '' || req.body.confirm == '' || req.body.email == '' || req.body.username == '')
+        {
+          req.flash('error2','All fields are compulsory');
+          flag=false;
+        }
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(re.test(req.body.email))
+        {
+            req.flash('error3','Please enter Valid EMAIL');
+            flag=false;
+        }
+
+        if(!flag)
+        {
+          res.render('signup', {
+            user: req.user
+          });
+        }
+      else{
+      var user = new User({
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password
+        });
+
+      user.save(function(err) {
+        req.logIn(user, function(err) {
+          res.redirect('/');
+        });
+      });
+    }
+  });
   });
 });
 
@@ -78,6 +146,35 @@ router.get('/logout', function(req, res){
 router.get('/forgot', function(req, res) {
   res.render('forgot', {
     user: req.user
+  });
+});
+
+router.get('/printform', (req, res) => {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+            db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
+        if (err) throw err;
+        var parts = result.date.split("/");
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+        result.addcomments2 = result.addcomments2.replace(/(?:\r\n|\r|\n)/g, '&#13;&#10;');
+        console.log(date);
+            res.render('printcheck', { user : req.user ,date:result.date, time:result.time,name: result.name,empid:result.empid,designation:result.designation,reportingto:result.reportingto,dateofjoining:result.dateofjoining,resigsubmit:result.resigsubmit,resignotice:result.resignotice,relievedon:result.relievedon,worksatisfaction:result.worksatis,comments:result.comments,op1:result.op1,op2:result.op2,op3:result.op3,op4:result.op4,op5:result.op5,op6:result.op6,op7:result.op7,op8:result.op8,addcomments1:result.addcomments1,addcomments2:result.addcomments2});
+            console.log(result.name);
+        db.close();
+    });
+  });
+});
+
+router.get('/delete', function(req, res) {
+  MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var myquery = { empid: req.user.username };
+  db.collection("empexit").deleteOne(myquery, function(err, obj) {
+    if (err) throw err;
+    console.log("1 document deleted");
+    res.redirect('/');
+    db.close();
+    });
   });
 });
 
@@ -162,7 +259,7 @@ router.post('/reset/:token', function(req, res) {
       var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
       var mailOptions = {
         to: user.email,
-        from: 'passwordreset@demo.com',
+        from: 'msrmhauth@gmail.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
@@ -175,6 +272,43 @@ router.post('/reset/:token', function(req, res) {
   ], function(err) {
     res.redirect('/');
   });
+});
+
+router.get('/form001', function(req, res) {
+  MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+            db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
+        if (err) throw err;
+        if(result)
+          res.redirect('/');
+        else
+          res.render('logincheck', {
+             user: req.user
+          });
+        db.close();
+    });
+});
+});
+
+router.post('/form001', (req, res) => {
+    console.log("Hemant here");
+    console.log(req.body);
+    var d = (new Date()).toLocaleDateString();
+    var myDate = (new Date()).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    console.log(d);
+    console.log(myDate);
+    MongoClient.connect(url, function(err, db) {
+          if (err) throw err;
+          var myobj = { empid : req.user.username, date:d, time:myDate,name: req.body.name, designation: req.body.designation, reportingto:req.body.reportingto, dateofjoining:req.body.dateofjoining, resigsubmit:req.body.resigsubmit, resignotice:req.body.resignotice, relievedon:req.body.relievedon, worksatis:req.body.worksatisfaction,comments:req.body.comments, op1:req.body.op1, op2:req.body.op2, op3:req.body.op3, op4:req.body.op4, op5:req.body.op5, op6:req.body.op6, op7:req.body.op7, op8:req.body.op8, addcomments1:req.body.addcomments1, addcomments2:req.body.addcomments2 };
+          db.collection("empexit").insertOne(myobj, function(err, res) {
+            if (err) throw err;
+            console.log("1 record inserted");
+            db.close();
+          });
+        });
+    //res.render('logincheck', { user : req.user });
+    res.redirect('/');
+    //res.status(200).send("pong!");
 });
 
 module.exports = router;

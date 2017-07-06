@@ -2,10 +2,17 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet',href='/stylesheets/style.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+
+    script(src="https://code.jquery.com/jquery-1.12.4.js")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js")
     .banner_h
         img(src="images/msrmh.png",alt="Banner",height="40%",width="100%",class="imag")
     .navbar.navbar-inverse.navbar-static-top(role='navigation')
@@ -31,10 +38,23 @@ html
                 a(href='/signup') Signup
 
   body
+    block printcontent
     .container
         if messages.error
             .alert.alert-danger
                 div= messages.error
+        if messages.error1
+            .alert.alert-danger
+                div= messages.error1
+        if messages.error2
+            .alert.alert-danger
+                div= messages.error2
+        if messages.error3
+            .alert.alert-danger
+                div= messages.error3
+        if messages.error4
+            .alert.alert-danger
+                div= messages.error4
         if messages.info
             .alert.alert-info
                 div= messages.info

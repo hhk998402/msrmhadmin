@@ -3,7 +3,7 @@ extends layout
 block content
   div(class='isa_error')
     h4(id='passerr')
-  form(method='POST',onsubmit="return passcheck()")
+  form(method='POST')
     legend Signup
     .form-group
       label(for='username') Username
@@ -20,7 +20,7 @@ block content
     button.btn.btn-primary(type='submit') Signup
 
   script.
-    function passcheck()
+    /*function passcheck()
     {
       //alert($('#password').val());
       if($('#password').val()==$('#confirm_password').val())
@@ -31,4 +31,4 @@ block content
         return(false);
       }
 
-    }
+    }*/

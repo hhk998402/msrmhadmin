@@ -1,0 +1,152 @@
+extends layout
+
+block printcontent
+    if (user)
+      div(id="container")
+            button(type="button",onClick="window.print()",class="printbtn") Print
+            h3(class="head1") Human Resources Department
+            h4(class="head2") Exployee Exit Interview
+            <br>
+            h4(class="date1") Interview Date (MM-DD-YYYY): #{date} <br>
+            h4(class="date2")           Time (HH:MM:SS): #{time}
+
+            table(class="tabletest",id="tabletest")
+                thead
+                    tr
+                        th Field
+                        th Response
+
+                tbody(class="tablebody")
+                    tr
+                        td Employee Name:
+                        td #{name}
+                    tr
+                        td Employee ID:
+                        td #{empid}
+                    tr
+                        td Designation:
+                        td #{designation}
+                    tr
+                        td Reporting to: (Name of Supervisor/HOD)
+                        td #{reportingto}
+                    tr
+                        td Date of Joining (DD-MM-YYYY):
+                        td #{dateofjoining}
+                    tr
+                        td Resignation Submitted (DD-MM-YYYY):
+                        td #{resigsubmit}
+                    tr
+                        td Resignation Notice Period:
+                        td
+                            input(type="radio",id="resig1",disabled)
+                            Thing 1 Month <br>
+                            input(type="radio",id="resig2",disabled)
+                            Thing 24 Hours <br>
+                    tr
+                        td Relieved On (DD-MM-YYYY):
+                        td #{relievedon}
+                    tr
+                        td Work Satisfaction:
+                        td
+                            input(type="radio",id="satis1",disabled)
+                            Thing Yes <br>
+                            input(type="radio",id="satis2",disabled)
+                            Thing No <br>
+                    tr
+                        td Your Comments:
+                        td
+                            textarea(class="textarea",name="comments",id="comments",rows="3",cols="45",readonly)
+                    tr
+                        td Crucial Reason for Leaving:
+                        td
+                            input(type="radio",id="op1",disabled)
+                            Thing Retirement <br>
+                            input(type="radio",id="op2",disabled)
+                            Thing Career Advancement/Enhancement <br>
+                            input(type="radio",id="op3",disabled)
+                            Thing Personal Reasons <br>
+                            input(type="radio",id="op4",disabled)
+                            Thing Scale of Pay <br>
+                            input(type="radio",id="op5",disabled)
+                            Thing Inadequate resources to perform duty <br>
+                            input(type="radio",id="op6",disabled)
+                            Thing Dissatisfaction about work <br>
+                            input(type="radio",id="op7",disabled)
+                            Thing Work Culture <br>
+                            input(type="radio",id="op8",disabled)
+                            Thing Interpersonal relationships in the department <br>
+            h5 If given an opportunity, would you like to come back to this organisation in the future?
+            textarea(class="textarea",name="comments",id="addcomments1",value='',rows="2",cols="85",readonly)
+            h5 Additional Comments, if any.
+            textarea(class="textarea",name="comments",id="addcomments2",value='',rows="2",cols="85",readonly) #{addcomments2}
+            <br><br><br><br>
+            h4(class="emp") Signature of Employee
+            h4(class="mng") HR Manager
+
+    script.
+        $(function(){
+            //alert("itthe");
+            var button1 = document.getElementById("resig1");
+            var button2 = document.getElementById("resig2");
+            var button3 = document.getElementById("satis1");
+            var button4 = document.getElementById("satis2");
+            var btn1 = document.getElementById("op1");
+            var btn2 = document.getElementById("op2");
+            var btn3 = document.getElementById("op3");
+            var btn4 = document.getElementById("op4");
+            var btn5 = document.getElementById("op5");
+            var btn6 = document.getElementById("op6");
+            var btn7 = document.getElementById("op7");
+            var btn8 = document.getElementById("op8");
+            document.getElementById("comments").innerHTML = "";
+            document.getElementById("comments").innerHTML = "#{comments}";
+            document.getElementById("addcomments1").innerHTML = "";
+            document.getElementById("addcomments1").innerHTML = "#{addcomments1}";
+            var s;
+            alert("#{addcomments2}".length)
+            //alert(s1);
+            check = "#{resignotice}";
+            //alert(check);
+            if(check == "24 Hours")
+            {
+                //alert("HERE");
+                button2.checked = true;
+            }
+
+            else
+                button1.checked = true;
+            satis = "#{worksatisfaction}"
+            //alert(satis);
+            if(satis == "Yes")
+                button3.checked = true;
+            else
+                button4.checked = true;
+            $("#comments").each(function () {
+            this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            $("#addcomments1").each(function () {
+            this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            $("#addcomments2").each(function () {
+            this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            if("#{op1}"!='')
+                btn1.checked = true;
+            if("#{op2}"!='')
+                btn2.checked = true;
+            if("#{op3}"!='')
+                btn3.checked = true;
+            if("#{op4}"!='')
+                btn4.checked = true;
+            if("#{op5}"!='')
+                btn5.checked = true;
+            if("#{op6}"!='')
+                btn6.checked = true;
+            if("#{op7}"!='')
+                btn7.checked = true;
+            if("#{op8}"!='')
+                btn8.checked = true;
+        });
