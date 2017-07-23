@@ -1,3 +1,14 @@
+table {
+    align:left;
+    width: 100%;
+    border-collapse: collapse;
+}
+th {
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+
 .isa_error {
     color: #D8000C;
     background-color: #FFBABA;
@@ -425,6 +436,9 @@ p{
     color:#fff;
 }
 
+button{
+    height: auto;
+}
 
 body {
   padding: 50px;

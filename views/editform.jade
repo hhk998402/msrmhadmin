@@ -1,0 +1,331 @@
+extends layout
+
+block content
+    link(rel="stylesheet",href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+    link(rel='stylesheet',href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-1.12.4.js")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
+    if (!user)
+        p Not allowed to view this page
+
+    else if (user)
+        h2 Human Resource Department
+        p(id="Error") The text fields with an asterisk (*) marked are compulsory
+        form(action='/form001',method='post',class='form-style-7',onsubmit="return mySubmitFunction()")
+            ul
+                li(id="namebox")
+                    label(for="name") Name
+                        span(class="required")    *
+                    input(type="text",name="name",id="name",maxlength="100",onKeyPress="return disableEnterKey(event)",value="#{name}")
+                    span Enter your full name here
+                li(id="empidbox")
+                    label(for="empid") Employee ID
+                        span(class="required")    *
+                    input(type="text",id="empid",name="empid",onKeyPress="return disableEnterKey(event)",value='#{empid}')
+                    span Enter your correct employee ID here
+                li(id="desigbox")
+                    label(for="designation") Designation
+                        span(class="required")    *
+                    input(type="text",name="designation",id="designation",value='#{designation}',onKeyPress="return disableEnterKey(event)")
+                    span Enter your designation here
+                li(id="reportingbox")
+                    label(for="reportingto") Reporting to:
+                        span(class="required")    *
+                    input(type="text",name="reportingto",id="reportingto",value='#{reportingto}',onKeyPress="return disableEnterKey(event)")
+                    span Reporting to: (Name of Supervisor / HOD)
+                li(id="datebox1")
+                    label(type="date",for="dateofjoining") Date of Joining:
+                        span(class="required")    *
+                    input(id="datepicker1",type="text",value='#{dateofjoining}',name="dateofjoining",readonly="readonly",onKeyPress="return disableEnterKey(event)")
+                    span Select the date of joining (DD-MM-YYYY)
+                li(id="datebox2")
+                    label(type="date",for="resigsubmit") Resignation Submitted On:
+                        span(class="required")    *
+                    input(id="datepicker2",type="text",name="resigsubmit",value='#{resigsubmit}',readonly="readonly",onKeyPress="return disableEnterKey(event)")
+                    span Select date of submission of resignation (DD-MM-YYYY)
+                li(id="resignotice")
+                    label(for="resignotice") Resignation Notice Period
+                        span(class="required")    *
+                    input(class='resignotice1',id='resig1',type='radio', name='resignotice', value='1 Month',onKeyPress="return disableEnterKey(event)")
+                    Thing 1 Month <br>
+                    input(class='resignotice2',id='resig2',type='radio', name='resignotice', value='24 Hours',onKeyPress="return disableEnterKey(event)")
+                    Thing 24 Hours <br>
+                    span Resignation Notice Period (Select relevant option)
+                li(id="datebox3")
+                    label(type="date",for="relievedon") Relieved On:
+                        span(class="required")    *
+                    input(id="datepicker3",type="text",name="relievedon",value='relievedon',readonly="readonly",onKeyPress="return disableEnterKey(event)")
+                    span Relieved On (DD-MM-YYYY)
+                li(id="worksatisfaction")
+                    label(for="worksatisfaction") Work Satisfaction
+                        span(class="required")    *
+                    input(class='worksatisfaction1',type='radio', id='satis1',name='worksatisfaction', value='Yes',onKeyPress="return disableEnterKey(event)")
+                    Thing Yes <br>
+                    input(class='worksatisfaction2',type='radio', id='satis2',name='worksatisfaction', value='No',onKeyPress="return disableEnterKey(event)")
+                    Thing No <br>
+                    span Work Satisfaction (Select relevant option)
+                li(id="comments")
+                    label(for="comments") Your Comments:
+                    textarea(name="comments",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    span Your Comments (if any)
+                li(id="leavereason")
+                    label(for="leavereason") Crucial Reason for Leaving:
+                        span(class="required")    *
+                    <br>
+                    form(action='')
+                        input(class='leavereason1',type='radio', name='op1', id="op1",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Retirement <br>
+                        input(class='leavereason2',type='radio', name='op2', id="op2",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Career Advancement/Enhancement <br>
+                        input(class='leavereason3',type='radio', name='op3', id="op3",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Personal Reasons <br>
+                        input(class='leavereason4',type='radio', name='op4', id="op4",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Scale of Pay <br>
+                        input(class='leavereason5',type='radio', name='op5', id="op5",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Inadequate resources to perform duty <br>
+                        input(class='leavereason6',type='radio', name='op6', id="op6",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Dissatisfaction about work <br>
+                        input(class='leavereason7',type='radio', name='op7', id="op7",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Work Culture <br>
+                        input(class='leavereason8',type='radio', name='op8', id="op8",value='Yes',onKeyPress="return disableEnterKey(event)")
+                        Thing Interpersonal relationships in the department <br>
+                        span Please note, this is a crucial input for the hospital, for enhancing the satisfaction of the employees
+                li(id="addcomments1")
+                    textarea(name="addcomments1",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    span If given an opportunity, would you like to come back to this organisation in the future?
+                li(id="addcomments2")
+                    textarea(name="addcomments2",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    span Additional Comments if any
+                li
+                    input(type="submit",value="Send this")
+
+    script.
+        function adjust_textarea(h) {
+            h.style.height = "20px";
+            h.style.height = (h.scrollHeight)+"px";
+        }
+
+        $.fn.pVal = function(){
+            //alert("Here");
+            var $this = $(this),
+            val = $this.eq(0).val();
+            if(val == $this.attr('placeholder'))
+                return('');
+            else
+                return(val);
+            }
+
+    script.
+        $( function() {
+            $( "#datepicker1" ).datepicker({
+            changeYear:true,
+            dateFormat:"dd-mm-yy",
+            maxDate: new Date()});
+            $( "#datepicker2" ).datepicker({
+            changeYear:true,
+            dateFormat:"dd-mm-yy",
+            maxDate: new Date()});
+            $( "#datepicker3" ).datepicker({
+            changeYear:true,
+            dateFormat:"dd-mm-yy",
+            maxDate: new Date()});
+
+
+            var radios = $('input[type=radio]');
+
+            /**
+             * Adds click listeners to all checkboxes to unselect checkbox if it was checked already
+             */
+            function updateCheckboxes() {
+                radios.unbind('click');
+                radios.filter(':checked').click(function () {
+                    $(this).prop('checked', false);
+                });
+                radios.click(function () {
+                    updateCheckboxes();
+                });
+            }
+
+            updateCheckboxes();
+
+        });
+
+    script.
+        function disableEnterKey(e)
+        {
+             var key;
+             if(window.event)
+                  key = window.event.keyCode; //IE
+             else
+                  key = e.which; //firefox
+
+             return (key != 13);
+        }
+    script.
+        $(function(){
+            //alert("itthe");
+            var button1 = document.getElementById("resig1");
+            var button2 = document.getElementById("resig2");
+            var button3 = document.getElementById("satis1");
+            var button4 = document.getElementById("satis2");
+            var btn1 = document.getElementById("op1");
+            var btn2 = document.getElementById("op2");
+            var btn3 = document.getElementById("op3");
+            var btn4 = document.getElementById("op4");
+            var btn5 = document.getElementById("op5");
+            var btn6 = document.getElementById("op6");
+            var btn7 = document.getElementById("op7");
+            var btn8 = document.getElementById("op8");
+            var s='#{comments}';
+            var x=0;
+            var m=s.split('@#$%^*');
+            document.getElementById("comments").innerHTML = "";
+            for(x=0;x<m.length;x++)
+            {
+                document.getElementById("comments").innerHTML += m[x];
+                document.getElementById("comments").innerHTML += '\n';
+            }
+            document.getElementById("addcomments1").innerHTML = "";
+            s='#{addcomments1}';
+            x=0;
+            m=s.split('@#$%^*');
+            for(x=0;x<m.length;x++)
+            {
+                document.getElementById("addcomments1").innerHTML += m[x];
+                document.getElementById("addcomments1").innerHTML += '\n';
+            }
+            document.getElementById("addcomments2").innerHTML = "";
+            s='#{addcomments2}';
+            x=0;
+            m=s.split('@#$%^*');
+            for(x=0;x<(m.length);x++)
+            {
+                document.getElementById("addcomments2").innerHTML+= m[x];
+                document.getElementById("addcomments2").innerHTML+= '\n';
+            }
+            //var s;
+            //alert("#{addcomments2}".length)
+            //alert(s1);
+            check = "#{resignotice}";
+            //alert(check);
+            if(check == "24 Hours")
+            {
+                //alert("HERE");
+                button2.checked = true;
+            }
+
+            else
+                button1.checked = true;
+            satis = "#{worksatisfaction}"
+            //alert(satis);
+            if(satis == "Yes")
+                button3.checked = true;
+            else
+                button4.checked = true;
+            $("#comments").each(function () {
+                this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            $("#addcomments1").each(function () {
+                this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            $("#addcomments2").each(function () {
+                this.style.height = (this.scrollHeight+10)+'px';
+
+            });
+            if("#{op1}"!='')
+                btn1.checked = true;
+            if("#{op2}"!='')
+                btn2.checked = true;
+            if("#{op3}"!='')
+                btn3.checked = true;
+            if("#{op4}"!='')
+                btn4.checked = true;
+            if("#{op5}"!='')
+                btn5.checked = true;
+            if("#{op6}"!='')
+                btn6.checked = true;
+            if("#{op7}"!='')
+                btn7.checked = true;
+            if("#{op8}"!='')
+                btn8.checked = true;
+        });
+
+    script.
+        function mySubmitFunction()
+        {
+            var resignotice1 = $('.resignotice1').prop('checked') ? true : false;
+            var resignotice2 = $('.resignotice2').prop('checked') ? true : false;
+            var resignotice = resignotice1 || resignotice2;
+            var worksatisfaction1 = $('.worksatisfaction1').prop('checked') ? true : false;
+            var worksatisfaction2 = $('.worksatisfaction2').prop('checked') ? true : false;
+            var worksatisfaction = worksatisfaction1 || worksatisfaction2;
+            //alert("Here");
+            var leavereason1 = $('.leavereason1').prop('checked') ? true : false;
+            var leavereason2 = $('.leavereason2').prop('checked') ? true : false;
+            var leavereason3 = $('.leavereason3').prop('checked') ? true : false;
+            var leavereason4 = $('.leavereason4').prop('checked') ? true : false;
+            var leavereason5 = $('.leavereason5').prop('checked') ? true : false;
+            var leavereason6 = $('.leavereason6').prop('checked') ? true : false;
+            var leavereason7 = $('.leavereason7').prop('checked') ? true : false;
+            var leavereason8 = $('.leavereason8').prop('checked') ? true : false;
+            var leavereason = leavereason1 || leavereason2 || leavereason3 || leavereason4 || leavereason5 || leavereason6 || leavereason7 || leavereason8;
+            //var dateright = ($(dateofjoining).pVal()=='' || $(resigsubmit).pVal()=='' || $(relievedon).pVal()=='')
+            $('#empidbox').css('border-color', '#DDDDDD');
+            $('#namebox').css('border-color', '#DDDDDD');
+            $('#desigbox').css('border-color', '#DDDDDD');
+            $('#reportingbox').css('border-color', '#DDDDDD');
+            $('#datebox1').css('border-color', '#DDDDDD');
+            $('#datebox2').css('border-color', '#DDDDDD');
+            $('#resignotice').css('border-color', '#DDDDDD');
+            $('#datebox3').css('border-color', '#DDDDDD');
+            $('#worksatisfaction').css('border-color', '#DDDDDD');
+            $('#leavereason').css('border-color', '#DDDDDD');
+            //alert(resignotice);
+            //alert(worksatisfaction);
+            //alert(leavereason);
+            var radioright = (worksatisfaction && leavereason && resignotice);
+            //alert(radioright);
+            //alert(dateright);
+            /*if(!radioright)
+            {
+                alert("RadioError");
+                return(false);
+            }*/
+            //alert("HHK");
+            //alert($('#datepicker2').pVal()=='');
+            var dateright = ($('#datepicker1').pVal()=='' || $('#datepicker2').pVal()=='' || $('#datepicker3').pVal()=='');
+            //alert(dateright);
+
+            if (!radioright || !$('#empid').val() || !$('#name').val() || !$('#designation').val() || !$(reportingto).val() || dateright)
+            {
+                document.getElementById('Error').innerHTML = "The textboxes outlined in red are compulsory and have to be filled in";
+                alert("fwefge");
+                //flag=false
+                if($('#empid').val() == '')
+                    $('#empidbox').css('border-color', 'red');
+                if($('#name').val() == '')
+                    $('#namebox').css('border-color', 'red');
+                if($('#designation').val() == '')
+                    $('#desigbox').css('border-color', 'red');
+                if($('#reportingto').val() == '')
+                    $('#reportingbox').css('border-color', 'red');
+                if($('#datepicker1').pVal() == '')
+                    $('#datebox1').css('border-color', 'red');
+                if($('#datepicker2').pVal() == '')
+                    $('#datebox2').css('border-color', 'red');
+                if(!resignotice)
+                    $('#resignotice').css('border-color', 'red');
+                if($('#datepicker3').pVal() == '')
+                    $('#datebox3').css('border-color', 'red');
+                if(!worksatisfaction)
+                    $('#worksatisfaction').css('border-color', 'red');
+                if(!leavereason)
+                    $('#leavereason').css('border-color', 'red');
+                //alert(isChecked);
+
+
+                return false;
+            }
+        }

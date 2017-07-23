@@ -78,7 +78,7 @@ block printcontent
             h5 If given an opportunity, would you like to come back to this organisation in the future?
             textarea(class="textarea",name="comments",id="addcomments1",value='',rows="2",cols="85",readonly)
             h5 Additional Comments, if any.
-            textarea(class="textarea",name="comments",id="addcomments2",value='',rows="2",cols="85",readonly) #{addcomments2}
+            textarea(class="textarea",name="comments",id="addcomments2",value='',rows="2",cols="85",readonly) hiufbie br wiefe
             <br><br><br><br>
             h4(class="emp") Signature of Employee
             h4(class="mng") HR Manager
@@ -98,12 +98,35 @@ block printcontent
             var btn6 = document.getElementById("op6");
             var btn7 = document.getElementById("op7");
             var btn8 = document.getElementById("op8");
+            var s='#{comments}';
+            var x=0;
+            var m=s.split('@#$%^*');
             document.getElementById("comments").innerHTML = "";
-            document.getElementById("comments").innerHTML = "#{comments}";
+            for(x=0;x<m.length;x++)
+            {
+                document.getElementById("comments").innerHTML += m[x];
+                document.getElementById("comments").innerHTML += '\n';
+            }
             document.getElementById("addcomments1").innerHTML = "";
-            document.getElementById("addcomments1").innerHTML = "#{addcomments1}";
-            var s;
-            alert("#{addcomments2}".length)
+            s='#{addcomments1}';
+            x=0;
+            m=s.split('@#$%^*');
+            for(x=0;x<m.length;x++)
+            {
+                document.getElementById("addcomments1").innerHTML += m[x];
+                document.getElementById("addcomments1").innerHTML += '\n';
+            }
+            document.getElementById("addcomments2").innerHTML = "";
+            s='#{addcomments2}';
+            x=0;
+            m=s.split('@#$%^*');
+            for(x=0;x<(m.length);x++)
+            {
+                document.getElementById("addcomments2").innerHTML+= m[x];
+                document.getElementById("addcomments2").innerHTML+= '\n';
+            }
+            //var s;
+            //alert("#{addcomments2}".length)
             //alert(s1);
             check = "#{resignotice}";
             //alert(check);

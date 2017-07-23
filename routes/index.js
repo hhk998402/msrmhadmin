@@ -24,23 +24,18 @@ router.get('/', function(req, res){
     {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-                db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
-            if (err) throw err;
-            if(result)
-              res.render('index', {
-              title: 'Employee Exit Form',
-              user: req.user,
-              formexist: true
-              });
-            else
-              res.render('index', {
-              title: 'Employee Exit Form',
-              user: req.user,
-              formexist: false
-              });
-            db.close();
+            db.collection("empexit").find({}).toArray(function(err, result) {
+                if (err) throw err;
+                console.log(result);
+                res.render('index', {
+                    title: 'Employee Exit Form',
+                    user: req.user,
+                    res: JSON.stringify(result),
+                    number: result.length
+                });
+                db.close();
+            });
         });
-    });
     }
         else
         {
@@ -57,6 +52,10 @@ router.get('/', function(req, res){
     user: req.user
   });
     }*/
+});
+
+router.post('/', function(req, res) {
+    console.log(req.body)
 });
 
 router.get('/login', function(req, res) {
@@ -109,7 +108,7 @@ router.post('/signup', function(req, res) {
           flag=false;
         }
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(re.test(req.body.email))
+        if(!re.test(req.body.email))
         {
             req.flash('error3','Please enter Valid EMAIL');
             flag=false;
@@ -150,32 +149,137 @@ router.get('/forgot', function(req, res) {
 });
 
 router.get('/printform', (req, res) => {
+    console.log(req.url);
+    var queryString = req.url.substring( req.url.indexOf('?') + 1 );
+    console.log(queryString);
+    if(req.user)
+    {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-            db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
+            db.collection("empexit").findOne({empid:queryString}, function(err, result) {
         if (err) throw err;
-        var parts = result.date.split("/");
-        date = new Date(parts[2], parts[1] - 1, parts[0]);
-        result.addcomments2 = result.addcomments2.replace(/(?:\r\n|\r|\n)/g, '&#13;&#10;');
-        console.log(date);
-            res.render('printcheck', { user : req.user ,date:result.date, time:result.time,name: result.name,empid:result.empid,designation:result.designation,reportingto:result.reportingto,dateofjoining:result.dateofjoining,resigsubmit:result.resigsubmit,resignotice:result.resignotice,relievedon:result.relievedon,worksatisfaction:result.worksatis,comments:result.comments,op1:result.op1,op2:result.op2,op3:result.op3,op4:result.op4,op5:result.op5,op6:result.op6,op7:result.op7,op8:result.op8,addcomments1:result.addcomments1,addcomments2:result.addcomments2});
-            console.log(result.name);
+                if(!result)
+                    res.redirect('/');
+                else {
+                    var parts = result.date.split("/");
+                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    //result.addcomments2 = result.addcomments2.replace(/(?:\r|\n)/g, '&#13;&#10;');
+                    //result.addcomments2 = result.addcomments2.split("\n").join("&#13;&#10;");
+                    //result.addcomments2=result.addcomments2.replace(/\r?\n/g, '&#13;&#10;');
+                    result.addcomments2 = result.addcomments2.replace(/\r?\n/g, '@#$%^*');
+                    //result.addcomments2='gbwgbe&#10;efewwfeg';
+                    //console.log(result.addcomments2);
+                    res.render('printcheck', {
+                        user: req.user,
+                        date: result.date,
+                        time: result.time,
+                        name: result.name,
+                        empid: result.empid,
+                        designation: result.designation,
+                        reportingto: result.reportingto,
+                        dateofjoining: result.dateofjoining,
+                        resigsubmit: result.resigsubmit,
+                        resignotice: result.resignotice,
+                        relievedon: result.relievedon,
+                        worksatisfaction: result.worksatis,
+                        comments: result.comments,
+                        op1: result.op1,
+                        op2: result.op2,
+                        op3: result.op3,
+                        op4: result.op4,
+                        op5: result.op5,
+                        op6: result.op6,
+                        op7: result.op7,
+                        op8: result.op8,
+                        addcomments1: result.addcomments1,
+                        addcomments2: result.addcomments2
+                    });
+                    console.log(result.name);
+                }
         db.close();
     });
   });
+  }
+  else
+  {
+    res.redirect('/');
+  }
+});
+
+router.get('/edit', (req, res) => {
+    console.log(req.url);
+    var queryString = req.url.substring( req.url.indexOf('?') + 1 );
+    console.log(queryString);
+    if(req.user)
+    {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            db.collection("empexit").findOne({empid:queryString}, function(err, result) {
+                if (err) throw err;
+                if(!result)
+                    res.redirect('/');
+                else {
+                    var parts = result.date.split("/");
+                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    //result.addcomments2 = result.addcomments2.replace(/(?:\r|\n)/g, '&#13;&#10;');
+                    //result.addcomments2 = result.addcomments2.split("\n").join("&#13;&#10;");
+                    //result.addcomments2=result.addcomments2.replace(/\r?\n/g, '&#13;&#10;');
+                    result.addcomments2 = result.addcomments2.replace(/\r?\n/g, '@#$%^*');
+                    //result.addcomments2='gbwgbe&#10;efewwfeg';
+                    //console.log(result.addcomments2);
+                    res.render('editform', {
+                        user: req.user,
+                        name: result.name,
+                        empid: result.empid,
+                        designation: result.designation,
+                        reportingto: result.reportingto,
+                        dateofjoining: result.dateofjoining,
+                        resigsubmit: result.resigsubmit,
+                        resignotice: result.resignotice,
+                        relievedon: result.relievedon,
+                        worksatisfaction: result.worksatis,
+                        comments: result.comments,
+                        op1: result.op1,
+                        op2: result.op2,
+                        op3: result.op3,
+                        op4: result.op4,
+                        op5: result.op5,
+                        op6: result.op6,
+                        op7: result.op7,
+                        op8: result.op8,
+                        addcomments1: result.addcomments1,
+                        addcomments2: result.addcomments2
+                    });
+                    console.log(result.name);
+                }
+                db.close();
+            });
+        });
+    }
+    else
+    {
+        res.redirect('/');
+    }
 });
 
 router.get('/delete', function(req, res) {
-  MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var myquery = { empid: req.user.username };
-  db.collection("empexit").deleteOne(myquery, function(err, obj) {
+  if(req.user)
+  {
+    MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    console.log("1 document deleted");
-    res.redirect('/');
-    db.close();
+    var myquery = { empid: req.user.username };
+    db.collection("empexit").deleteOne(myquery, function(err, obj) {
+      if (err) throw err;
+      console.log("1 document deleted");
+      res.redirect('/');
+      db.close();
+      });
     });
-  });
+  }
+  else
+  {
+    res.redirect('/');
+  }
 });
 
 router.post('/forgot', function(req, res, next) {
@@ -275,6 +379,8 @@ router.post('/reset/:token', function(req, res) {
 });
 
 router.get('/form001', function(req, res) {
+  if(req.user)
+  {
   MongoClient.connect(url, function(err, db) {
         if (err) throw err;
             db.collection("empexit").findOne({empid:req.user.username}, function(err, result) {
@@ -287,7 +393,10 @@ router.get('/form001', function(req, res) {
           });
         db.close();
     });
-});
+  });
+  }
+  else
+    res.redirect('/');
 });
 
 router.post('/form001', (req, res) => {
