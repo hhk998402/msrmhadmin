@@ -1,0 +1,252 @@
+extends layout
+
+block content
+    link(rel="stylesheet",href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+    link(rel='stylesheet',href='/stylesheets/style.css')
+    script(src="https://code.jquery.com/jquery-1.12.4.js")
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
+    if(!user)
+        p Please Login to view this page
+    else if(user)
+        center
+            table
+                thead
+                    tr
+                        div(class='caption') Sort By Department
+                        div(class="styled-select blue semi-square")
+                            select(id="dept")
+            div(class='caption') Sort By Date
+            div(class="styled-select blue semi-square")
+                input(id="datefilter",type="text",value='',name="datefilter",READONLY,onKeyPress="return disableEnterKey(event)")
+        div(id="chartcontainer",style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto")
+        script.
+            $("#datefilter").datepicker({
+                changeYear:true,
+                dateFormat:"dd-mm-yy",
+                maxDate: new Date()
+            });
+        script.
+            function chartrender(deptname,datenow,datadisp){
+                var showtext='Reasons for Exit of Employees, '+'Sorted by dept: '+deptname;
+                if(datenow!=(new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-')))
+                    showtext+=" and by date: "+datenow;
+                Highcharts.chart('chartcontainer', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: showtext
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        name: '% of employees',
+                        colorByPoint: true,
+                        data: datadisp
+                    }]
+                });
+            }
+        script.
+            $(document).ready(function () {
+                var rankArray = JSON.parse(!{JSON.stringify(res)});
+                var i;
+                var op1=0,op2=0,op3=0,op4=0,op5=0,op6=0,op7=0,op8=0,chk=0;
+                for(i=0;i<rankArray.length;i++) {
+                    if(rankArray[i].op1!=null){
+                        op1+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op2!=null){
+                        op2+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op3!=null){
+                        op3+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op4!=null){
+                        op4+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op5!=null){
+                        op5+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op6!=null){
+                        op6+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op7!=null){
+                        op7+=1;
+                        chk+=1;
+                    }
+                    if(rankArray[i].op8!=null){
+                        op8+=1;
+                        chk+=1;
+                    }
+                }
+                var obj=[{
+                    name: 'Retirement',
+                    y: op1/chk*100
+                }, {
+                    name: 'Career Advancement/Enhancement',
+                    y: op2/chk*100
+                }, {
+                    name: 'Personal Reasons',
+                    y: op3/chk*100
+                }, {
+                    name: 'Scale of Pay',
+                    y: op4/chk*100
+                }, {
+                    name: 'Inadequate resources to perform duty',
+                    y: op5/chk*100
+                }, {
+                    name: 'Dissatisfaction about work',
+                    y: op6/chk*100
+                }, {
+                    name: 'Work Culture',
+                    y: op7/chk*100
+                }, {
+                    name: 'Interpersonal relationships in the department',
+                    y: op8/chk*100
+                }];
+                var datenow=new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+                chartrender("All Departments",datenow,obj);
+            });
+        script.
+            function modchart(deptname,datenow) {
+                var rankArray = JSON.parse(!{JSON.stringify(res)});
+                var i;
+                var parts = datenow.split('-');
+                var mydate = new Date(parts[2],parts[1]- 1 ,parts[0]);
+                var op1 = 0, op2 = 0, op3 = 0, op4 = 0, op5 = 0, op6 = 0, op7 = 0, op8 = 0, chk = 0;
+                for (i = 0; i < rankArray.length; i++) {
+                    var parts1 = rankArray[i].resigsubmit.split('-');
+                    var mydate1 = new Date(parts1[2],parts1[1]- 1 ,parts1[0]);
+                    if((deptname!="All Departments"&&deptname!=rankArray[i].reportingto)||mydate<mydate1) {
+                        continue;
+                    }
+                    else {
+
+                        if (rankArray[i].op1 != null) {
+                            op1 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op2 != null) {
+                            op2 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op3 != null) {
+                            op3 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op4 != null) {
+                            op4 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op5 != null) {
+                            op5 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op6 != null) {
+                            op6 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op7 != null) {
+                            op7 += 1;
+                            chk += 1;
+                        }
+                        if (rankArray[i].op8 != null) {
+                            op8 += 1;
+                            chk += 1;
+                        }
+                    }
+                }
+                var obj = [{
+                    name: 'Retirement',
+                    y: op1 / chk * 100
+                }, {
+                    name: 'Career Advancement/Enhancement',
+                    y: op2 / chk * 100
+                }, {
+                    name: 'Personal Reasons',
+                    y: op3 / chk * 100
+                }, {
+                    name: 'Scale of Pay',
+                    y: op4 / chk * 100
+                }, {
+                    name: 'Inadequate resources to perform duty',
+                    y: op5 / chk * 100
+                }, {
+                    name: 'Dissatisfaction about work',
+                    y: op6 / chk * 100
+                }, {
+                    name: 'Work Culture',
+                    y: op7 / chk * 100
+                }, {
+                    name: 'Interpersonal relationships in the department',
+                    y: op8 / chk * 100
+                }];
+                chartrender("All Departments", datenow, obj);
+            }
+        script.
+            $(function(){
+                var rankArray = JSON.parse(!{JSON.stringify(res)});
+                var i;
+                $('#dept').append($('<option>',
+                        {
+                            value: "All Departments",
+                            text: "All Departments"
+                        }));
+                $("#datefilter").val(new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-'));
+                for(i=0;i<rankArray.length;i++) {
+                    $('#dept').append($('<option>',
+                            {
+                                value: rankArray[i].reportingto,
+                                text: rankArray[i].reportingto
+                            }));
+                }
+            });
+
+            $('#dept').change(function(){
+                //alert( $(this).find("option:selected").attr('value') );
+                var deptname = $('#dept').find("option:selected").attr('value');
+                var datenow = document.getElementById("datefilter").value;
+                modchart(deptname,datenow);
+            });
+
+            $('#datefilter').change(function () {
+                //alert( dataoriginale );
+                var datenow = document.getElementById("datefilter").value;
+                var deptname = $('#dept').find("option:selected").attr('value');
+                modchart(deptname,datenow);
+            })
+
+            function disableEnterKey(e)
+            {
+                var key;
+                if(window.event)
+                    key = window.event.keyCode; //IE
+                else
+                key = e.which; //firefox
+
+                return (key != 13);
+            }

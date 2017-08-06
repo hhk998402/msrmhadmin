@@ -13,7 +13,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
-var User = require('./models/User');
+var User = require('./models/admins');
 var flash = require('express-flash');
 
 var index = require('./routes/index');

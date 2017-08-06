@@ -8,7 +8,7 @@ var async = require('async');
 var crypto = require('crypto');
 var flash = require('express-flash');
 
-mongoose.connect('mongodb://hhk998402:SkillRack998@quizcluster-shard-00-00-1gbtm.mongodb.net:27017,quizcluster-shard-00-01-1gbtm.mongodb.net:27017,quizcluster-shard-00-02-1gbtm.mongodb.net:27017/quiz?ssl=true&replicaSet=QuizCluster-shard-0&authSource=admin');
+mongoose.connect('mongodb://msrmhauth:enigma2k17@msrmh-shard-00-00-znqup.mongodb.net:27017,msrmh-shard-00-01-znqup.mongodb.net:27017,msrmh-shard-00-02-znqup.mongodb.net:27017/msrmh?ssl=true&replicaSet=msrmh-shard-0&authSource=admin');
 var userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -41,4 +41,4 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
-module.exports = mongoose.model('User',userSchema);
+module.exports = mongoose.model('admin',userSchema);

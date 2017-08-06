@@ -1,0 +1,182 @@
+extends layout
+
+block content
+    if(!user)
+        p Not Allowed to view this page
+    else if(user)
+        div(id="myModal",class="modal")
+            div(class="modal-content")
+                h2 Delete Record
+                div(class="modal-body")
+                    h4 The document to be deleted:
+                    table(class="zui-table zui-table-rounded",id="deletecont")
+                        thead
+                            tr
+                                th Employee ID
+                        tbody(id='delcontt')
+                div(class="modal-footer")
+                    h5 Deletion cannot be reversed
+                    button(id="cancelBtn") Cancel
+                    button(id="delBtn") Delete
+        table(id="showData")
+            center
+                button(id="addnewform",class="btn btn-default")
+                    i(class="glyphicon glyphicon-plus")
+                        h4(class='addnew') Add New Form
+            <br>
+        table(id="table_id",class="display",data-toggle="table",data-pagination="true",data-show-refresh="true",data-show-toggle="true",data-show-columns="true",data-search="true",data-show-pagination-switch="true",data-id-field="visitor_id",data-page-list="[10, 25, 50, 100, ALL]",data-show-footer="false")
+            thead
+                tr
+                    th Emp ID
+                    th Name
+                    th Date
+                    th Time
+                    th Des.
+                    th DOJ
+                    th Res Sub.
+                    th Res N.
+                    th Rel On.
+                    th Work S.
+                    th Reasons for Exit
+                    th Rehireable
+                    th Action
+            tbody
+        script.
+            $(function () {
+                var i = 1;
+                var rankArray = JSON.parse( !{JSON.stringify(res)} );
+                //alert(rankArray[0].empid);
+                for(i=0;i<rankArray.length;i++) {
+                    var out='';
+                    var url1,url2,url3;
+                    url1="/edit?"+rankArray[i].empid;
+                    url2="/printform?"+rankArray[i].empid;
+                    var m=0;
+                    if(rankArray[i].op1!=null){
+                        out+="<strong>"+ ++m+"</strong>"+". Retirement <br>";
+                    }
+                    if(rankArray[i].op2!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Career Advancement <br>";
+                    if(rankArray[i].op3!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Personal Reasons <br>";
+                    if(rankArray[i].op4!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Scale of Pay <br>";
+                    if(rankArray[i].op5!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Inadequate resources to perform duty <br>";
+                    if(rankArray[i].op6!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Dissatisfaction about work <br>";
+                    if(rankArray[i].op7!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Work culture <br>";
+                    if(rankArray[i].op8!=null)
+                        out+="<strong>"+ ++m +"</strong>"+". Interpersonal relationships in the department <br>";
+                    var f = '';
+                    f += "<tr><td>" + rankArray[i].empid + "</td>";
+                    f += "<td>"+rankArray[i].name+"</td><td>"+rankArray[i].date+"</td><td>"+rankArray[i].time+"</td>";
+                    f += "<td>"+rankArray[i].designation+"</td><td>";
+                    f += rankArray[i].dateofjoining+"</td><td>"+rankArray[i].resigsubmit+"</td><td>"+rankArray[i].resignotice;
+                    f += "</td><td>"+rankArray[i].relievedon+"</td><td>"+rankArray[i].worksatis+"</td><td>"+out+"</td>";
+                    f += "<td>"+rankArray[i].rehireable;
+                    f += "</td><td><a class='editform' id='";
+                    f += rankArray[i].empid;
+                    f += "' onclick='return editformclick(this.id);' title='Edit' method='POST'>";
+                    f += "<span class='glyphicon glyphicon-pencil'>  Edit</span>";
+                    f += "<a class='viewform' href='";
+                    f += url2+"' title='View Form' method='POST'>";
+                    f += "<span class='glyphicon glyphicon-search'> View Form</span>";
+                    f += "<a class='deleteclass' id='";
+                    f += rankArray[i].empid + "' onclick='return clickhandler(this.id);'> <span class='glyphicon glyphicon-trash'>   Delete</span>";
+                    f += "</td></tr>";
+                    $("#table_id > tbody").append(f);
+                }
+                /*<td>"+rankArray[i].op1+"</td><td>";
+                 f += rankArray[i].op2+"</td><td>"+rankArray[i].op3+"</td><td>"+rankArray[i].op4+"</td><td>";
+                 f += rankArray[i].op5+"</td><td>"+rankArray[i].op6+"</td><td>"+rankArray[i].op7+"</td><td>";
+                 f += rankArray[i].op8+"</td></tr>"*/
+                /*for(i=0;i<#{number};i++) {
+                 var s = '';
+                 var char2 = '{';
+                 var char1 = '#';
+                 var char3 = '}';
+
+                 var mak=f;
+                 //alert(mak);
+                 //alert(f);
+
+                 s += "<tr><td>" + char1 + char2 + "res" + "[" + i + "]"+".empid"+char3+"</td>";
+                 s+= "<td>m</td><td><button id='egfiw'>Print Form</button></td></tr>"
+                 $("#table_id > tbody").append(s);
+                 alert(s);
+                 }*/
+                $('#table_id').DataTable({
+                    responsive: true
+                });
+            });
+
+        script.
+            var modal = document.getElementById('myModal');
+            // Get the button that opens the modal
+            // Get the <span> element that closes the modal
+            var span = document.getElementById("cancelBtn");
+            // When the user clicks on the button, open the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            function clickhandler(clickedid){
+                $("#delcontt").empty();
+                modal.style.display = "block";
+                var f='';
+                f += "<tr><td>";
+                f += clickedid + "</td></tr>"
+
+                $("#deletecont > tbody").append(f);
+                $('#delBtn').val(clickedid);
+            }
+
+            function editformclick(clickedid){
+                $.ajax({
+                    url: '/edit',
+                    type: 'POST',
+                    data: clickedid,
+                    success: function(data){
+                        if(typeof(data.redirect)=="string"){
+                            window.location = data.redirect;
+                        }
+                    }
+                });
+            }
+
+            $("#addnewform").click(function () {
+                $.ajax({
+                    url: '/addform',
+                    type: 'GET',
+                    success:function(data){
+                        if(typeof(data.redirect)=="string"){
+                            window.location = data.redirect;
+                        }
+                    }
+                });
+            });
+
+            $("#delBtn").click(function(){
+                modal.style.display = "none";
+                $.ajax({
+                    url: '/del',
+                    type: 'POST',
+                    data: this.value,
+                    success: function(data){
+                        if(typeof(data.redirect)=="string"){
+                            if(typeof(data.messages)=="string"){
+                                alert(data.messages);
+                            }
+                            window.location = data.redirect;
+                        }
+                    }
+                });
+            });

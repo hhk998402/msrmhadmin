@@ -21,7 +21,7 @@ block content
                 li(id="empidbox")
                     label(for="empid") Employee ID
                         span(class="required")    *
-                    input(type="text",id="empid",name="empid",value="#{user.username}",onKeyPress="return disableEnterKey(event)",DISABLED)
+                    input(type="text",id="empid",name="empid",onKeyPress="return disableEnterKey(event)")
                     span Enter your correct employee ID here
                 li(id="desigbox")
                     label(for="designation") Designation
@@ -66,12 +66,11 @@ block content
                     span Work Satisfaction (Select relevant option)
                 li(id="comments")
                     label(for="comments") Your Comments:
-                    textarea(name="comments",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="comments",id="commentdata",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span Your Comments (if any)
                 li(id="leavereason")
                     label(for="leavereason") Crucial Reason for Leaving:
                         span(class="required")    *
-                    <br>
                     form(action='')
                         input(class='leavereason1',type='radio', name='op1', value='Yes',onKeyPress="return disableEnterKey(event)")
                         Thing Retirement <br>
@@ -91,13 +90,21 @@ block content
                         Thing Interpersonal relationships in the department <br>
                         span Please note, this is a crucial input for the hospital, for enhancing the satisfaction of the employees
                 li(id="addcomments1")
-                    textarea(name="addcomments1",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="addcomments1",id="addcommdata1",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span If given an opportunity, would you like to come back to this organisation in the future?
                 li(id="addcomments2")
-                    textarea(name="addcomments2",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="addcomments2",id="addcommdata2",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span Additional Comments if any
-                li
+                li(class='submitbtn')
                     input(type="submit",value="Send this")
+                li(id="rehireable")
+                    label(for="rehireable") Is the employee re-hireable or not?
+                        span(class="required")    *
+                    input(class='rehireable1',type='radio', name='rehireable', value='Yes',onKeyPress="return disableEnterKey(event)")
+                    Thing Yes <br>
+                    input(class='rehireable2',type='radio', name='rehireable', value='No',onKeyPress="return disableEnterKey(event)")
+                    Thing No <br>
+                    span Rehireability (Select Relevant Option)
 
     script.
         function adjust_textarea(h) {
@@ -172,7 +179,9 @@ block content
             var worksatisfaction1 = $('.worksatisfaction1').prop('checked') ? true : false;
             var worksatisfaction2 = $('.worksatisfaction2').prop('checked') ? true : false;
             var worksatisfaction = worksatisfaction1 || worksatisfaction2;
-            //alert("Here");
+            var rehireable1 = $('.rehireable1').prop('checked') ? true : false;
+            var rehireable2 = $('.rehireable2').prop('checked') ? true : false;
+            var rehireable = rehireable1 || rehireable2;
             var leavereason1 = $('.leavereason1').prop('checked') ? true : false;
             var leavereason2 = $('.leavereason2').prop('checked') ? true : false;
             var leavereason3 = $('.leavereason3').prop('checked') ? true : false;
@@ -193,10 +202,11 @@ block content
             $('#datebox3').css('border-color', '#DDDDDD');
             $('#worksatisfaction').css('border-color', '#DDDDDD');
             $('#leavereason').css('border-color', '#DDDDDD');
+            $('#rehireable').css('border-color', '#DDDDDD');
             //alert(resignotice);
             //alert(worksatisfaction);
             //alert(leavereason);
-            var radioright = (worksatisfaction && leavereason && resignotice);
+            var radioright = (worksatisfaction && leavereason && resignotice && rehireable);
             //alert(radioright);
             //alert(dateright);
             /*if(!radioright)
@@ -212,7 +222,7 @@ block content
             if (!radioright || !$('#empid').val() || !$('#name').val() || !$('#designation').val() || !$(reportingto).val() || dateright)
             {
                 document.getElementById('Error').innerHTML = "The textboxes outlined in red are compulsory and have to be filled in";
-                alert("fwefge");
+                alert("All Required fields have not been filled in");
                 //flag=false
                 if($('#empid').val() == '')
                     $('#empidbox').css('border-color', 'red');
@@ -234,9 +244,75 @@ block content
                     $('#worksatisfaction').css('border-color', 'red');
                 if(!leavereason)
                     $('#leavereason').css('border-color', 'red');
+                if(!rehireable)
+                    $('#rehireable').css('border-color', 'red');
                 //alert(isChecked);
 
-
+                return false;
+            }
+            else{
+                var resignoticesend,worksend,hire,op1=null,op2=null,op3=null,op4=null,op5=null,op6=null,op7=null,op8=null;
+                if(resignotice1)
+                    resignoticesend=$('.resignotice1').val();
+                else if(resignotice2)
+                    resignoticesend=$('.resignotice2').val();
+                if(worksatisfaction1)
+                    worksend=$('.worksatisfaction1').val();
+                else if(worksatisfaction2)
+                    worksend=$('.worksatisfaction2').val();
+                if(rehireable1)
+                    hire=$('.rehireable1').val();
+                else if(rehireable2)
+                    hire=$('.rehireable2').val();
+                if(leavereason1)
+                    op1='Yes'
+                if(leavereason2)
+                    op2='Yes'
+                if(leavereason3)
+                    op3='Yes'
+                if(leavereason4)
+                    op4='Yes'
+                if(leavereason5)
+                    op5='Yes'
+                if(leavereason6)
+                    op6='Yes'
+                if(leavereason7)
+                    op7='Yes'
+                if(leavereason8)
+                    op8='Yes'
+                $.ajax({
+                    url: '/form001',
+                    type: 'POST',
+                    data: {name: $('#name').val(),
+                        empid: $('#empid').val(),
+                        designation: $('#designation').val(),
+                        reportingto: $('#reportingto').val(),
+                        dateofjoining:$('#datepicker1').pVal(),
+                        resigsubmit:$('#datepicker2').pVal(),
+                        resignotice:resignoticesend,
+                        relievedon:$('#datepicker3').pVal(),
+                        worksatisfaction: worksend,
+                        comments:$('#commentdata').val(),
+                        op1:op1,
+                        op2:op2,
+                        op3:op3,
+                        op4:op4,
+                        op5:op5,
+                        op6:op6,
+                        op7:op7,
+                        op8:op8,
+                        addcomments1:$('#addcommdata1').val(),
+                        addcomments2:$('#addcommdata2').val(),
+                        rehireable:hire
+                    },
+                    success: function(data){
+                        if(typeof(data.error)=="string")
+                            alert(data.error);
+                        if(typeof(data.redirect)=="string") {
+                            window.location = data.redirect;
+                        }
+                    }
+                });
                 return false;
             }
         }

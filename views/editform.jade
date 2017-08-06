@@ -11,7 +11,7 @@ block content
     else if (user)
         h2 Human Resource Department
         p(id="Error") The text fields with an asterisk (*) marked are compulsory
-        form(action='/form001',method='post',class='form-style-7',onsubmit="return mySubmitFunction()")
+        form(action='/editform',method='post',id="form1",class='form-style-7',onsubmit="return mySubmitFunction()")
             ul
                 li(id="namebox")
                     label(for="name") Name
@@ -21,7 +21,7 @@ block content
                 li(id="empidbox")
                     label(for="empid") Employee ID
                         span(class="required")    *
-                    input(type="text",id="empid",name="empid",onKeyPress="return disableEnterKey(event)",value='#{empid}')
+                    input(type="text",id="empid",name="empid",onKeyPress="return disableEnterKey(event)",value='#{empid}',READONLY)
                     span Enter your correct employee ID here
                 li(id="desigbox")
                     label(for="designation") Designation
@@ -54,7 +54,7 @@ block content
                 li(id="datebox3")
                     label(type="date",for="relievedon") Relieved On:
                         span(class="required")    *
-                    input(id="datepicker3",type="text",name="relievedon",value='relievedon',readonly="readonly",onKeyPress="return disableEnterKey(event)")
+                    input(id="datepicker3",type="text",name="relievedon",value='#{relievedon}',readonly="readonly",onKeyPress="return disableEnterKey(event)")
                     span Relieved On (DD-MM-YYYY)
                 li(id="worksatisfaction")
                     label(for="worksatisfaction") Work Satisfaction
@@ -66,7 +66,7 @@ block content
                     span Work Satisfaction (Select relevant option)
                 li(id="comments")
                     label(for="comments") Your Comments:
-                    textarea(name="comments",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="comments",id="comment",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span Your Comments (if any)
                 li(id="leavereason")
                     label(for="leavereason") Crucial Reason for Leaving:
@@ -91,17 +91,38 @@ block content
                         Thing Interpersonal relationships in the department <br>
                         span Please note, this is a crucial input for the hospital, for enhancing the satisfaction of the employees
                 li(id="addcomments1")
-                    textarea(name="addcomments1",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="addcomments1",id="addcomment1",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span If given an opportunity, would you like to come back to this organisation in the future?
                 li(id="addcomments2")
-                    textarea(name="addcomments2",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
+                    textarea(name="addcomments2",id="addcomment2",onkeyup="adjust_textarea(this)",rows="3",cols="45",maxlength="150")
                     span Additional Comments if any
-                li
-                    input(type="submit",value="Send this")
-
+                li(class="submitbtn")
+                    input(type="submit",value="Update")
+                    p
+                    button(id="circ",class="cancelEdit") Cancel
+                li(id="rehireable")
+                    label(for="rehireable") Is the employee re-hireable or not?
+                        span(class="required")    *
+                    input(class='rehireable1',type='radio', name='rehireable', value='Yes',onKeyPress="return disableEnterKey(event)")
+                    Thing Yes <br>
+                    input(class='rehireable2',type='radio', name='rehireable', value='No',onKeyPress="return disableEnterKey(event)")
+                    Thing No <br>
+                    span Rehireability (Select Relevant Option)
     script.
+        $("#circ").click(function(e){
+            $.ajax({
+                url: '/cancel',
+                type: 'POST',
+                data: this.id,
+                success: function(data){
+                    if(typeof(data.redirect)=="string"){
+                        window.location = data.redirect;
+                    }
+                }
+            });
+        });
+
         function adjust_textarea(h) {
-            h.style.height = "20px";
             h.style.height = (h.scrollHeight)+"px";
         }
 
@@ -178,31 +199,31 @@ block content
             var btn8 = document.getElementById("op8");
             var s='#{comments}';
             var x=0;
+            var k='';
             var m=s.split('@#$%^*');
-            document.getElementById("comments").innerHTML = "";
             for(x=0;x<m.length;x++)
             {
-                document.getElementById("comments").innerHTML += m[x];
-                document.getElementById("comments").innerHTML += '\n';
+                k+=m[x]+'\n';
             }
-            document.getElementById("addcomments1").innerHTML = "";
+            $("#comment").val(k);
             s='#{addcomments1}';
             x=0;
+            k='';
             m=s.split('@#$%^*');
             for(x=0;x<m.length;x++)
             {
-                document.getElementById("addcomments1").innerHTML += m[x];
-                document.getElementById("addcomments1").innerHTML += '\n';
+                k+=m[x]+'\n';
             }
-            document.getElementById("addcomments2").innerHTML = "";
+            $("#addcomment1").val(k);
             s='#{addcomments2}';
             x=0;
+            k='';
             m=s.split('@#$%^*');
             for(x=0;x<(m.length);x++)
             {
-                document.getElementById("addcomments2").innerHTML+= m[x];
-                document.getElementById("addcomments2").innerHTML+= '\n';
+                k+=m[x]+'\n';
             }
+            $("#addcomment2").val(k);
             //var s;
             //alert("#{addcomments2}".length)
             //alert(s1);
@@ -261,6 +282,9 @@ block content
             var worksatisfaction1 = $('.worksatisfaction1').prop('checked') ? true : false;
             var worksatisfaction2 = $('.worksatisfaction2').prop('checked') ? true : false;
             var worksatisfaction = worksatisfaction1 || worksatisfaction2;
+            var rehireable1 = $('.rehireable1').prop('checked') ? true : false;
+            var rehireable2 = $('.rehireable2').prop('checked') ? true : false;
+            var rehireable = rehireable1 || rehireable2;
             //alert("Here");
             var leavereason1 = $('.leavereason1').prop('checked') ? true : false;
             var leavereason2 = $('.leavereason2').prop('checked') ? true : false;
@@ -282,10 +306,11 @@ block content
             $('#datebox3').css('border-color', '#DDDDDD');
             $('#worksatisfaction').css('border-color', '#DDDDDD');
             $('#leavereason').css('border-color', '#DDDDDD');
+            $('#rehireable').css('border-color', '#DDDDDD');
             //alert(resignotice);
             //alert(worksatisfaction);
             //alert(leavereason);
-            var radioright = (worksatisfaction && leavereason && resignotice);
+            var radioright = (worksatisfaction && leavereason && resignotice && rehireable);
             //alert(radioright);
             //alert(dateright);
             /*if(!radioright)
@@ -301,7 +326,7 @@ block content
             if (!radioright || !$('#empid').val() || !$('#name').val() || !$('#designation').val() || !$(reportingto).val() || dateright)
             {
                 document.getElementById('Error').innerHTML = "The textboxes outlined in red are compulsory and have to be filled in";
-                alert("fwefge");
+                alert("All required fields have not been filled");
                 //flag=false
                 if($('#empid').val() == '')
                     $('#empidbox').css('border-color', 'red');
@@ -323,9 +348,9 @@ block content
                     $('#worksatisfaction').css('border-color', 'red');
                 if(!leavereason)
                     $('#leavereason').css('border-color', 'red');
+                if(!rehireable)
+                    $('#rehireable').css('border-color', 'red');
                 //alert(isChecked);
-
-
                 return false;
             }
         }

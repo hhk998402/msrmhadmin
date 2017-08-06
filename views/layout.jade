@@ -1,5 +1,6 @@
 doctype html
 html
+  div(id="loader")
   head
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -12,6 +13,8 @@ html
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='/javascripts/datatables.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src="https://code.highcharts.com/highcharts.js")
+    script(src="https://code.highcharts.com/modules/exporting.js")
     .banner_h
         img(src="images/msrmh.png",alt="Banner",height="40%",width="100%",class="imag")
     .navbar.navbar-inverse.navbar-static-top(role='navigation')
@@ -35,8 +38,13 @@ html
                 a(href='/login') Login
               li
                 a(href='/signup') Signup
-
-  body
+  script.
+      function myFunction()
+          {
+              $('#loader').fadeOut("slow");
+              document.getElementById("page").style.display = "inline";
+          }
+  body(onload="myFunction()")
     block printcontent
     .container
         if messages.error
@@ -57,7 +65,5 @@ html
         if messages.info
             .alert.alert-info
                 div= messages.info
-        if messages.success
-            .alert.alert-success
-                div= messages.success
-        block content
+    div(id="page")
+      block content
