@@ -450,8 +450,8 @@ router.post('/forgot', function(req, res, next) {
       //var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
         var transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // secure:true for port 465, secure:false for port 587
+            port: 587,
+            secure: false, // secure:true for port 465, secure:false for port 587
             auth: {
                 user: 'msrmhauth@gmail.com',
                 pass: 'Auth998402'
@@ -513,8 +513,8 @@ router.post('/reset/:token', function(req, res) {
       //var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
         var transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // secure:true for port 465, secure:false for port 587
+            port: 587,
+            secure: false, // secure:true for port 465, secure:false for port 587
             auth: {
                 user: 'msrmhauth@gmail.com',
                 pass: 'Auth998402'
