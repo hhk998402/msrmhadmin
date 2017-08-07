@@ -447,7 +447,17 @@ router.post('/forgot', function(req, res, next) {
       });
     },
     function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
+      //var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
+        var transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // secure:true for port 465, secure:false for port 587
+            auth: {
+                user: 'msrmhauth@gmail.com',
+                pass: 'Auth998402'
+            }
+        });
+
         var mailOptions = {
         to: user.email,
         from: 'msrmhauth@gmail.com',
@@ -457,10 +467,14 @@ router.post('/forgot', function(req, res, next) {
           'http://' + req.headers.host + '/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
-      smtpTransport.sendMail(mailOptions, function(err) {
+        transporter.sendMail(mailOptions, function(err) {
+            req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+            done(err, 'done');
+        });
+      /*smtpTransport.sendMail(mailOptions, function(err) {
         req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
         done(err, 'done');
-      });
+      });*/
     }
   ], function(err) {
     if (err) return next(err);
@@ -501,7 +515,16 @@ router.post('/reset/:token', function(req, res) {
       });
     },
     function(user, done) {
-        var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
+        //var smtpTransport = nodemailer.createTransport("smtps://msrmhauth%40gmail.com:"+encodeURIComponent('Auth998402') + "@smtp.gmail.com:465");
+        var transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // secure:true for port 465, secure:false for port 587
+            auth: {
+                user: 'msrmhauth@gmail.com',
+                pass: 'Auth998402'
+            }
+        });
         var mailOptions = {
         to: user.email,
         from: 'msrmhauth@gmail.com',
@@ -509,10 +532,14 @@ router.post('/reset/:token', function(req, res) {
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
-      smtpTransport.sendMail(mailOptions, function(err) {
+        transporter.sendMail(mailOptions, function(err) {
+            req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+            done(err, 'done');
+        });
+      /*smtpTransport.sendMail(mailOptions, function(err) {
         req.flash('success', 'Success! Your password has been changed.');
         done(err);
-      });
+      });*/
     }
   ], function(err) {
     res.redirect('/');

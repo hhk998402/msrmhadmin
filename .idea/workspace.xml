@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2ee0c23d-92f1-4e96-a31e-496d4b9b5505" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="adminpanel.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,8 +87,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.60504204">
-              <caret line="459" column="19" selection-start-line="459" selection-start-column="19" selection-end-line="459" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.30252102">
+              <caret line="517" column="23" selection-start-line="517" selection-start-column="23" selection-end-line="517" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -175,7 +176,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -271,6 +271,7 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -767,8 +768,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.60504204">
-          <caret line="459" column="19" selection-start-line="459" selection-start-column="19" selection-end-line="459" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.30252102">
+          <caret line="517" column="23" selection-start-line="517" selection-start-column="23" selection-end-line="517" selection-end-column="23" />
           <folding />
         </state>
       </provider>
