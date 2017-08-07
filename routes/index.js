@@ -453,14 +453,14 @@ router.post('/forgot', function(req, res, next) {
             port: 465,
             secure: true, // secure:true for port 465, secure:false for port 587
             auth: {
-                user: 'msrmhauth@gmail.com',
+                user: 'msrmhauth998@gmail.com',
                 pass: 'Auth998402'
             }
         });
 
         var mailOptions = {
         to: user.email,
-        from: 'msrmhauth@gmail.com',
+        from: 'msrmhauth998@gmail.com',
         subject: 'Password Change - MSRMH Employee Exit Portal',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -521,13 +521,13 @@ router.post('/reset/:token', function(req, res) {
             port: 465,
             secure: true, // secure:true for port 465, secure:false for port 587
             auth: {
-                user: 'msrmhauth@gmail.com',
+                user: 'msrmhauth998@gmail.com',
                 pass: 'Auth998402'
             }
         });
         var mailOptions = {
         to: user.email,
-        from: 'msrmhauth@gmail.com',
+        from: 'msrmhauth998@gmail.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
