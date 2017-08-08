@@ -683,7 +683,7 @@ router.get('/excel', function(req, res, next) {
                 for (x = 0; x < result.length; x++) {
                     json.empdata.push({
                         'Employee Name': result[x].name,
-                        'Employee ID': result[x]._id,
+                        'Employee ID': result[x].empid,
                         'Date': result[x].date,
                         'Time': result[x].time,
                         'Designation': result[x].designation,
